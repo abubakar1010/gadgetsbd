@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { User, UserCredential } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,6 +13,7 @@ interface FormData {
 
 const Register = () => {
 	const auth = useAuth();
+	const navigate = useNavigate()
 
 	const {
 		register,
@@ -52,6 +53,7 @@ const Register = () => {
 						},
 					});
 				}
+				navigate("/")
 			})
 			.catch((error) => {
 				toast(`${error.message}`, {

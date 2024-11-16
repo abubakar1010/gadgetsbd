@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const Profile = () => {
 
     const auth = useAuth()
 
     const handleLogout = () => {
-        console.log(auth);
         
         auth!.logout()
         .then( () => {
+            console.log(auth);
             toast('you are successfully logout', {
-                duration: 4000,
+                duration: 2000,
                 position: 'top-center',
               
                 // Styling
@@ -97,6 +97,7 @@ const Profile = () => {
 					{listItem}
 				</ul>
 			</div>
+            <Toaster />
 		</>
 	);
 };

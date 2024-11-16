@@ -1,8 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { User, UserCredential } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
+import GoogleLogin from "./GoogleLogin";
 
 interface FormData {
 	name: string;
@@ -13,6 +14,7 @@ interface FormData {
 
 const Login = () => {
 	const auth = useAuth();
+	const navigate = useNavigate()
 
 	const {
 		register,
@@ -52,6 +54,7 @@ const Login = () => {
 						},
 					});
 				}
+				navigate("/")
 			})
 			.catch((error) => {
 				toast(`${error.message}`, {
@@ -151,6 +154,7 @@ const Login = () => {
 										</Link>
 									</div>
 								</div>
+								<GoogleLogin />
 							</form>
 						</div>
 					</div>

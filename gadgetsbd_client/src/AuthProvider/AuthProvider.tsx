@@ -46,6 +46,7 @@ const AuthProvider = ({children}: Readonly<{
 
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setLoading(true)
             setUser(currentUser)
             setLoading(false)
         })
