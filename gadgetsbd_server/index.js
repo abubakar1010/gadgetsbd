@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv/config";
 import { MongoClient, ServerApiVersion } from "mongodb";
+import jwt from "jsonwebtoken";
 
 const app = express();
 const port = process.env.Port || 5000;
@@ -40,6 +41,20 @@ const userCollection = client.db("gadgetsbd").collection("users");
 app.get("/", (_req, res) => {
     res.send("server connected");
 });
+
+
+app.post("/authentication", (req, res) => {
+    const userEmail = req.body;
+
+    const token =  jwt.sign(userEmail, process.env.ACCESS_TOKEN_SECRET, {expiresIn: process.env.ACCESS_TOKEN_EXPIRATION})
+
+    res.send({token})
+})
+
+
+
+
+
 
 app.listen(port, () => {
     console.log(`server connected on port ${port}`);
