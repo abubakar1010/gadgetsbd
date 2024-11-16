@@ -1,26 +1,41 @@
 import { Link, NavLink } from "react-router-dom";
 import Profile from "./profile";
+import { useAuth } from "../hooks/useAuth";
 
 const Navbar = () => {
+	const auth = useAuth();
 	const listItem = (
 		<>
-			<NavLink to={"/"} className={({isActive}) => ( isActive? "text-lg  rounded-md text-accent border border-accent px-4 py-1 mx-2" : "text-lg text-gray-600 px-3")}>
-			<li>
-				Home
-			</li>
+			<NavLink
+				to={"/"}
+				className={({ isActive }) =>
+					isActive
+						? "text-lg  rounded-md text-accent border border-accent px-4 py-1 mx-2"
+						: "text-lg text-gray-600 px-3"
+				}
+			>
+				<li>Home</li>
 			</NavLink>
-			<NavLink to={"/Store"} className={({isActive}) => ( isActive? "text-lg  rounded-md text-accent border border-accent px-4 py-1 mx-2" : "text-lg text-gray-600 px-3")}>
-			<li>
-				Store
-			</li>
+			<NavLink
+				to={"/Store"}
+				className={({ isActive }) =>
+					isActive
+						? "text-lg  rounded-md text-accent border border-accent px-4 py-1 mx-2"
+						: "text-lg text-gray-600 px-3"
+				}
+			>
+				<li>Store</li>
 			</NavLink>
-			<NavLink to={"/support"} className={({isActive}) => ( isActive? "text-lg  rounded-md text-accent border border-accent px-4 py-1 mx-2" : "text-lg text-gray-600 px-3")}>
-			<li>
-				Support
-			</li>
+			<NavLink
+				to={"/support"}
+				className={({ isActive }) =>
+					isActive
+						? "text-lg  rounded-md text-accent border border-accent px-4 py-1 mx-2"
+						: "text-lg text-gray-600 px-3"
+				}
+			>
+				<li>Support</li>
 			</NavLink>
-
-			
 		</>
 	);
 
@@ -55,21 +70,24 @@ const Navbar = () => {
 					<a className="btn btn-ghost text-xl">daisyUI</a>
 				</div>
 				<div className="navbar-center hidden lg:flex">
-					<ul className="menu menu-horizontal px-1">
-						{listItem}
-					</ul>
+					<ul className="menu menu-horizontal px-1">{listItem}</ul>
 				</div>
 				<div className="navbar-end">
 					<div className=" w-full flex justify-end gap-5">
-					<Link to={"/login"}>
-						<button className=" btn  btn-accent">Login</button>
-					</Link>
-					<Link to={"/register"}>
-						<button className=" btn btn-outline btn-accent">
-							Register
-						</button>
-					</Link>
-					<Profile />
+						{auth!.user ? (
+							<Profile />
+						) : (
+							<>
+								<Link to={"/login"}>
+									<button className=" btn  btn-accent">Login</button>
+								</Link>
+								<Link to={"/register"}>
+									<button className=" btn btn-outline btn-accent">
+										Register
+									</button>
+								</Link>
+							</>
+						)}
 					</div>
 				</div>
 			</div>
