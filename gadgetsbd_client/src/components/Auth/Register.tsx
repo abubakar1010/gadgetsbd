@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { User, UserCredential } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
+import { baseURL } from "../../utils/Constant";
 
 interface FormData {
 	name: string;
@@ -23,7 +25,6 @@ const Register = () => {
 	} = useForm<FormData>();
 
 	const onSubmit: SubmitHandler<FormData> = (data) => {
-		console.log(data);
 		auth!
 			.createUser(data.email, data.password)
 			.then((userCredential: UserCredential) => {
@@ -52,6 +53,25 @@ const Register = () => {
 							"aria-live": "polite",
 						},
 					});
+
+					const user = {
+						name: data.name,
+						email: data.email,
+						password: data.password,
+						role: data.role,
+						status: data.role === "Buyer"? "approved" : "pending" ,
+						wishlist: [],
+					}
+
+					axios.post(`${baseURL}/user`, {user})
+					.then( res => {
+						console.log(res.data);
+						
+					})
+					.catch( (error) => {
+						console.log(error);
+						
+					})
 				}
 				navigate("/")
 			})
