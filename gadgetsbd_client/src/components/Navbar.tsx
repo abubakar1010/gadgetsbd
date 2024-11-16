@@ -1,4 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
+import Profile from "./profile";
 
 const Navbar = () => {
 	const listItem = (
@@ -68,6 +69,7 @@ const Navbar = () => {
 							Register
 						</button>
 					</Link>
+					<Profile />
 					</div>
 				</div>
 			</div>
