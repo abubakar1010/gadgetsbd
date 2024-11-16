@@ -2,10 +2,11 @@ import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../../hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { User, UserCredential } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const GoogleLogin = () => {
 	const auth = useAuth();
+	const location = useLocation()
     const navigate = useNavigate()
 	const handleGoogleLogin = () => {
 		auth!
@@ -37,7 +38,7 @@ const GoogleLogin = () => {
 						},
 					});
 				}
-				navigate("/");
+				navigate(location.state? location.state : "/")
 			})
 			.catch((error) => {
 				toast(`${error.message}`, {
