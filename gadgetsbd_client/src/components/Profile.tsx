@@ -7,7 +7,6 @@ const Profile = () => {
     const auth = useAuth()
 
     const handleLogout = () => {
-        
         auth!.logout()
         .then( () => {
             console.log(auth);
