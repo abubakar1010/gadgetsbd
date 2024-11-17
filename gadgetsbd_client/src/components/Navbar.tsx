@@ -16,14 +16,14 @@ const Navbar = () => {
 				<li>Home</li>
 			</NavLink>
 			<NavLink
-				to={"/Store"}
+				to={"/product"}
 				className={({ isActive }) =>
 					isActive
 						? "text-lg  rounded-md text-accent border border-accent px-4 py-1 mx-2"
 						: "text-lg text-gray-600 px-3"
 				}
 			>
-				<li>Store</li>
+				<li>Product</li>
 			</NavLink>
 			<NavLink
 				to={"/support"}
