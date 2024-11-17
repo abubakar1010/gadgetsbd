@@ -45,9 +45,10 @@ export default function Wishlist() {
 		const email = user.email;
 		const productId = id;
 		axios
-			.patch(`${baseURL}/add-to-wishlist`, { email, productId })
+			.patch(`${baseURL}/remove-from-wishlist`, { email, productId })
 			.then((res) => {
 				console.log(res);
+        window.location.reload()
 			})
 			.catch((err) => {
 				console.log(err);
