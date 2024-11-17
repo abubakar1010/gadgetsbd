@@ -126,7 +126,7 @@ async function connectDD() {
 
 			if (existedProduct) return res.json({ message: "Product already exist" });
 
-			const result = await productCollection.insertOne(product);
+			const result = await productCollection.insertOne({...product, price: parseFloat(product.price)});
 
 			res.json({ message: "Product successfully added", result });
 		});
@@ -146,9 +146,10 @@ async function connectDD() {
 
         app.get("/all-product", async(req, res) => {
 
-            const {title, category, brand, sort} = req.query;
+            const {title, category, brand, sort, page=1, limit=9} = req.query;
 
             const query = {};
+			let sortOption = 1;
 
             if(title){
                 query.title = { $regex: title, $options: "i"}
@@ -159,13 +160,37 @@ async function connectDD() {
             if(brand){
                 query.brand = { $regex: brand, $options: "i"}
             }
-            if(title){
-                query.sort = sort === "acc"? 1 : -1
-            }
+            if(sort === "dec"){
+                sortOption = -1
+				console.log(sortOption);
+				
+            }else{
+				sortOption = 1
+			}
 
-			const result = await productCollection.find(query).sort({price: sort}).toArray()
+			const pageInNumber = Number(page)
+			const limitInNumber = Number(limit)
+
+			console.log(pageInNumber, limitInNumber);
+			
+
+			const result = await productCollection
+			.find(query)
+			.skip((pageInNumber - 1) * limitInNumber)
+			.limit(limitInNumber)
+			.sort({price: sortOption})
+			.toArray()
+
 			if(!result) res.status(404).json({message: "Product not found", result: null})
-				res.json({message: "successfully fetched products", result})
+
+				const product = await productCollection.find({},{brand: 1, category: 1}).toArray()
+
+				const productBrand = [...new Set(product.map( item => item.brand))]
+				const productCategory = [...new Set(product.map( item => item.category))]
+				const totalProduct = await productCollection.countDocuments(query)
+				
+
+				res.json({message: "successfully fetched products", result, productBrand, productCategory, totalProduct})
         })
 
 		app.get("/", (_req, res) => {
