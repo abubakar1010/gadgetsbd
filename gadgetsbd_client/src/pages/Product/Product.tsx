@@ -49,13 +49,10 @@ const Product = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [filter, setFilter] = useState<Filter>(initialState);
 	const [productInfo, setProductInfo] = useState(initialProductInfo);
-    const [page, SetPage] = useState(1)
-    const limit = 9
-    const totalPage = Math.ceil(productInfo.totalProduct / 9)
-    console.log(page);
-    
-
-
+	const [page, SetPage] = useState(1);
+	const limit = 9;
+	const totalPage = Math.ceil(productInfo.totalProduct / 9);
+	console.log(page);
 
 	useEffect(() => {
 		setLoading(true);
@@ -107,12 +104,27 @@ const Product = () => {
 		window.location.reload();
 	};
 
-    const handlePagination = (pageNumber: number) => {
-        if(pageNumber >= 1 && pageNumber <= totalPage){
-            SetPage(pageNumber)
-        }
-        window.scrollTo({top: 0, behavior: "smooth"})
-    }
+	const handlePagination = (pageNumber: number) => {
+		if (pageNumber >= 1 && pageNumber <= totalPage) {
+			SetPage(pageNumber);
+		}
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	};
+
+	const handleWishlist = (id: string) => {
+		const user = JSON.parse(localStorage.getItem("user")!);
+		const email = user.email;
+		const productId = id;
+		axios
+			.patch(`${baseURL}/add-to-wishlist`, { email, productId })
+			.then((res) => {
+				console.log(res);
+			})
+			.catch( err => {
+				console.log(err);
+				
+			})
+	};
 
 	return (
 		<>
@@ -143,7 +155,10 @@ const Product = () => {
 									<div className=" grid grid-cols-3 w-full gap-12">
 										{product.map((item) => (
 											<div key={item._id}>
-												<ProductCard item={item} />
+												<ProductCard
+													handleWishlist={handleWishlist}
+													item={item}
+												/>
 											</div>
 										))}
 									</div>
@@ -151,9 +166,21 @@ const Product = () => {
 							</>
 						)}
 						<div className="join my-7 text-center flex justify-center">
-							<button onClick={ () => handlePagination(page- 1)} className="join-item btn">«</button>
-							<button className="join-item btn">Page {page} of {totalPage} </button>
-							<button onClick={ () => handlePagination(page+ 1)} className="join-item btn">»</button>
+							<button
+								onClick={() => handlePagination(page - 1)}
+								className="join-item btn"
+							>
+								«
+							</button>
+							<button className="join-item btn">
+								Page {page} of {totalPage}{" "}
+							</button>
+							<button
+								onClick={() => handlePagination(page + 1)}
+								className="join-item btn"
+							>
+								»
+							</button>
 						</div>
 					</div>
 				</div>
