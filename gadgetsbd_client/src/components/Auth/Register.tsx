@@ -63,7 +63,7 @@ const Register = () => {
 						wishlist: [],
 					}
 
-					axios.post(`${baseURL}/user`, {user})
+					axios.post(`${baseURL}/create-user`, {user})
 					.then( res => {
 						console.log(res.data);
 						

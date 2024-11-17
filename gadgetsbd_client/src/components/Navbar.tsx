@@ -1,9 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import Profile from "./profile";
-import { useAuth } from "../hooks/useAuth";
+import Profile from "./Profile";
 
 const Navbar = () => {
-	const auth = useAuth();
+	const user = JSON.parse(localStorage.getItem("user")!)
 	const listItem = (
 		<>
 			<NavLink
@@ -74,7 +73,7 @@ const Navbar = () => {
 				</div>
 				<div className="navbar-end">
 					<div className=" w-full flex justify-end gap-5">
-						{auth!.user ? (
+						{user ? (
 							<Profile />
 						) : (
 							<>

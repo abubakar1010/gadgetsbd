@@ -66,7 +66,11 @@ const Profile = () => {
 			<li>
 				<Link to="/profile" className="justify-between">
 					Profile
-					
+				</Link>
+			</li>
+			<li>
+				<Link to="/dashboard" className="justify-between">
+					Dashboard
 				</Link>
 			</li>
 			<li>
