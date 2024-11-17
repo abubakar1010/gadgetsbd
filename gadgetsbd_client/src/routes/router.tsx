@@ -10,6 +10,7 @@ import Wishlist from "../components/Dashboard/Buyer/Wishlist";
 import SellerOverview from "../components/Dashboard/Seller/SellerOverview";
 import AddProduct from "../components/Dashboard/Seller/AddProduct";
 import OurProduct from "../components/Dashboard/Seller/OurProduct";
+import Product from "../pages/Product/Product";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
             {
                 path: "/",
                 element: <Home />
+            },
+            {
+                path: "/product",
+                element: <Product />
             },
             {
                 path: "/login",
