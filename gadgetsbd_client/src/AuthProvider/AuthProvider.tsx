@@ -51,6 +51,7 @@ const AuthProvider = ({children}: Readonly<{
             setLoading(true)
             setUser(currentUser)
             if(currentUser){
+                localStorage.setItem("user", JSON.stringify(currentUser))
                 axios.post(`${baseURL}/authentication`, {email: currentUser.email})
                 .then( (res) => {
                     const token: string = res?.data?.token
