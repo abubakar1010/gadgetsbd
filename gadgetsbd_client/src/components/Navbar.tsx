@@ -1,8 +1,9 @@
 import { Link, NavLink } from "react-router-dom";
 import Profile from "./Profile";
+import { useUserData } from "../hooks/useUserData";
 
 const Navbar = () => {
-	const user = JSON.parse(localStorage.getItem("user")!)
+	const user = useUserData()
 	const listItem = (
 		<>
 			<NavLink
