@@ -90,8 +90,6 @@ async function connectDD() {
 		app.post("/create-user", async (req, res) => {
 			const { user } = req.body;
 
-			console.log(req.body, user);
-
 			const existedUser = await userCollection.findOne({ email: user.email });
 
 			if (existedUser) return res.json({ message: "User already exist" });
@@ -135,10 +133,10 @@ async function connectDD() {
 
 		// get single product
 
-		app.get("/single-product/:name", async (req, res) => {
-			const name = req.params.name;
+		app.get("/single-product/:title", async (req, res) => {
+			const title = req.params.title;
 
-			const result = await productCollection.findOne({ name });
+			const result = await productCollection.findOne({ title });
 
 			if (!result) return res.json({ message: "Product not found" });
 
@@ -234,7 +232,7 @@ async function connectDD() {
 
 			res
 				.status(200)
-				.json({ message: "Wishlist product fetched successfully", result });
+				.json({ message: "Wishlist product fetched successfully", result: product });
 		});
 
 		app.get("/", (_req, res) => {
