@@ -3,7 +3,13 @@ import Layout from "../Layout/Layout";
 import Home from "../pages/Home/Home";
 import Login from "../components/Auth/Login";
 import Register from "../components/Auth/Register";
-import PrivateRoute from "../components/PrivateRoute";
+import DashboardLayout from "../Layout/DashboardLayout";
+import BuyerOverview from "../components/Dashboard/Buyer/BuyerOverview";
+import MyCart from "../components/Dashboard/Buyer/MyCart";
+import Wishlist from "../components/Dashboard/Buyer/Wishlist";
+import SellerOverview from "../components/Dashboard/Seller/SellerOverview";
+import AddProduct from "../components/Dashboard/Seller/AddProduct";
+import OurProduct from "../components/Dashboard/Seller/OurProduct";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -19,8 +25,43 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/register",
-                element: <PrivateRoute><Register /></PrivateRoute>
+                element: <Register />
             },
+        ]
+    },
+    {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children:[
+            // buyer routes
+            {
+                path: "/dashboard/buyer-overview",
+                element: <BuyerOverview />
+            },
+            {
+                path: "/dashboard/cart",
+                element: <MyCart />
+            },
+            {
+                path: "/dashboard/wishlist",
+                element: <Wishlist />
+            },
+
+            // seller routes
+
+            {
+                path: "/dashboard/seller-overview",
+                element: <SellerOverview />
+            },
+            {
+                path: "/dashboard/add-product",
+                element: <AddProduct />
+            },
+            {
+                path: "/dashboard/our-product",
+                element: <OurProduct />
+            },
+            
         ]
     }
 ])
