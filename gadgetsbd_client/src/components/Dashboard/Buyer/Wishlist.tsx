@@ -38,7 +38,7 @@ export default function Wishlist() {
       console.log(err);
       
     })
-  },[])
+  },[email])
 
 
   const handleWishlist = (id: string) => {
