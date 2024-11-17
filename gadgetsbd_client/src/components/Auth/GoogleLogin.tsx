@@ -3,17 +3,61 @@ import { useAuth } from "../../hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { User, UserCredential } from "firebase/auth";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { baseURL } from "../../utils/Constant";
 
 const GoogleLogin = () => {
 	const auth = useAuth();
-	const location = useLocation()
-    const navigate = useNavigate()
+	const location = useLocation();
+	const navigate = useNavigate();
 	const handleGoogleLogin = () => {
 		auth!
 			.loginWithGoogle()
 			.then((userCredential: UserCredential) => {
 				const user: User = userCredential.user;
 				if (user) {
+					const newUser = {
+						name: user.displayName,
+						email: user.email,
+						password: "123456",
+						role: "Buyer",
+						status: "approved",
+						wishlist: [],
+					};
+
+					axios
+						.post(`${baseURL}/create-user`, { user: newUser })
+						.then((res) => {
+							console.log(res.data);
+							if (res.data.result) {
+								toast("user created successfully", {
+									duration: 1000,
+									position: "top-center",
+
+									// Styling
+									style: {},
+									className: "",
+
+									// Custom Icon
+									icon: "👏",
+
+									// Change colors of success/error/loading icon
+									iconTheme: {
+										primary: "#000",
+										secondary: "#fff",
+									},
+
+									// Aria
+									ariaProps: {
+										role: "status",
+										"aria-live": "polite",
+									},
+								});
+							}
+						})
+						.catch((error) => {
+							console.log(error);
+						});
 					toast("you are successfully logged in", {
 						duration: 2000,
 						position: "top-center",
@@ -37,8 +81,8 @@ const GoogleLogin = () => {
 							"aria-live": "polite",
 						},
 					});
+					navigate(location.state ? location.state : "/");
 				}
-				navigate(location.state? location.state : "/")
 			})
 			.catch((error) => {
 				toast(`${error.message}`, {
@@ -78,7 +122,7 @@ const GoogleLogin = () => {
 					<p className=" text-lg">Login With Google</p>
 				</div>
 			</div>
-            <Toaster />
+			<Toaster />
 		</>
 	);
 };
