@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv/config";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 import jwt from "jsonwebtoken";
 
 const app = express();
@@ -192,6 +192,28 @@ async function connectDD() {
 
 				res.json({message: "successfully fetched products", result, productBrand, productCategory, totalProduct})
         })
+
+
+
+		// wishlist endpoints
+
+		app.patch("/add-to-wishlist", async(req, res) => {
+			const {email, productId} = req.body;
+
+			const result = await userCollection.updateOne({email},{
+				$addToSet:{
+					wishlist: new ObjectId(String(productId))
+				}
+			})
+
+			res.json({message: "Item added successful", result})
+		})
+
+
+
+
+
+
 
 		app.get("/", (_req, res) => {
 			res.send("server connected");
