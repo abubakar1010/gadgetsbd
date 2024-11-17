@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { CircleLoader } from "react-spinners";
+import Loading from "./Loading";
 
 const PrivateRoute = ({children}: Readonly<{children: ReactNode}>) => {
 
@@ -10,7 +10,7 @@ const PrivateRoute = ({children}: Readonly<{children: ReactNode}>) => {
     console.log(location);
     
 
-    if(auth!.loading) return <CircleLoader />
+    if(auth!.loading) return <Loading />
 
     if(auth!.user) return children
 

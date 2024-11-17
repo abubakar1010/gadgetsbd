@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useAdmin } from "../hooks/useAdmin";
-import { CircleLoader } from "react-spinners";
+import Loading from "../components/Loading";
 
 const DashboardLayout = () => {
 	const sellerContent = (
@@ -40,7 +40,7 @@ const DashboardLayout = () => {
     const {user, fetching} = useAdmin()
 	console.log(fetching, user);
 
-	if(fetching) return <CircleLoader />
+	if(fetching) return <Loading />
 	
     
 	return (
