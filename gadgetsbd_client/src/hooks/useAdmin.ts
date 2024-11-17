@@ -1,46 +1,36 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { baseURL } from "../utils/Constant"
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { baseURL } from "../utils/Constant";
 
 interface User {
-    role: string,
+	role: string;
 }
 
- export const useAdmin = () => {
-    const [user, setUser] = useState<User | null>(null)
-    const [fetching, setFetching] = useState<boolean>(false)
+export const useAdmin = () => {
+	const [user, setUser] = useState<User | null>(null);
+	const [fetching, setFetching] = useState<boolean>(false);
 
-    const info = localStorage.getItem("user") || "not found"
+	const info = localStorage.getItem("user") || "not found";
 
-    const email = JSON.parse(info)
+	const email = JSON.parse(info);
 
-    
-    
+	useEffect(() => {
+		setFetching(true);
+		axios
+			.get(`${baseURL}/get-user?email=${email.email}`)
+			.then((res) => {
+				setUser(res.data.result);
+				setFetching(false);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, [email.email]);
 
-        useEffect(() =>{
-            setFetching(true)
-            axios.get(`${baseURL}/get-user?email=${email.email}`)
-        .then((res) => {
-            console.log(res);
-            
-            setUser(res.data.result)
-            
-                setFetching(false)
-            
-        })
-        .catch( (error) => {
-            console.log(error);
-            
-        })
-        },[])
+	const data = {
+		user,
+		fetching,
+	};
 
-    const data = {
-        user,
-        fetching
-    }
-
-    console.log(data);
-    
-
-    return data
-}
+	return data;
+};

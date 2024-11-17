@@ -1,6 +1,5 @@
 export const useUserData = () => {
+	const data = JSON.parse(localStorage.getItem("user")!);
 
-    const data = JSON.parse(localStorage.getItem("user")!)
-
-    return data
-}
+	return data;
+};

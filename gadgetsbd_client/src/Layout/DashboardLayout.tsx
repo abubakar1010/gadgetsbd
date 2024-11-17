@@ -38,7 +38,6 @@ const DashboardLayout = () => {
     )
 
     const {user, fetching} = useAdmin()
-	console.log(fetching, user);
 
 	if(fetching) return <Loading />
 	
@@ -56,7 +55,7 @@ const DashboardLayout = () => {
 					Open drawer
 				</label>
 			</div>
-			<div className="drawer-side">
+			<div className="drawer-side mr-6">
 				<label
 					htmlFor="my-drawer-2"
 					aria-label="close sidebar"

@@ -6,6 +6,7 @@ import axios from "axios";
 import { baseURL } from "../../utils/Constant";
 import Loading from "../../components/Loading";
 import ProductCard from "../../components/Product/ProductCard";
+import { useUserData } from "../../hooks/useUserData";
 
 interface Product {
 	brand: string;
@@ -32,6 +33,8 @@ interface ProductInfo {
 	totalProduct: number;
 }
 const Product = () => {
+	const user = useUserData();
+
 	const initialState: Filter = {
 		title: "",
 		sort: "acc",
@@ -52,7 +55,6 @@ const Product = () => {
 	const [page, SetPage] = useState(1);
 	const limit = 9;
 	const totalPage = Math.ceil(productInfo.totalProduct / 9);
-	console.log(page);
 
 	useEffect(() => {
 		setLoading(true);
@@ -112,7 +114,6 @@ const Product = () => {
 	};
 
 	const handleWishlist = (id: string) => {
-		const user = JSON.parse(localStorage.getItem("user")!);
 		const email = user.email;
 		const productId = id;
 		axios
@@ -120,10 +121,9 @@ const Product = () => {
 			.then((res) => {
 				console.log(res);
 			})
-			.catch( err => {
+			.catch((err) => {
 				console.log(err);
-				
-			})
+			});
 	};
 
 	return (
@@ -158,6 +158,7 @@ const Product = () => {
 												<ProductCard
 													handleWishlist={handleWishlist}
 													item={item}
+													wishlistItem={false}
 												/>
 											</div>
 										))}

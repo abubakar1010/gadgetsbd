@@ -1,9 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
 import Profile from "./Profile";
-import { useUserData } from "../hooks/useUserData";
+import { useAuth } from "../hooks/useAuth";
 
 const Navbar = () => {
-	const user = useUserData()
+	const data = useAuth()
+	const user = data?.user
+	console.log(user);;
+	
 	const listItem = (
 		<>
 			<NavLink
