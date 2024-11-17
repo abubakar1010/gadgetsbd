@@ -66,6 +66,8 @@ const AuthProvider = ({children}: Readonly<{
             }else{
                 localStorage.removeItem("access-token")
                 localStorage.removeItem("user")
+                console.log(localStorage.getItem("user"));
+                
                 setLoading(false)
             }
         })
