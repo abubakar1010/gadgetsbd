@@ -61,9 +61,9 @@ async function connectDD() {
 					if (!result) res.status(404).json({ message: "user not found" });
 					if (result.email === "Seller") {
 						next();
-					}else{
-                        res.status(401).json({message: "unAuthorized user"})
-                    }
+					} else {
+						res.status(401).json({ message: "unAuthorized user" });
+					}
 				});
 			} else {
 				return res.status(401).json("You are not authenticated");
@@ -118,7 +118,6 @@ async function connectDD() {
 
 		app.post("/add-product", async (req, res) => {
 			const { product } = req.body;
-            
 
 			const existedProduct = await productCollection.findOne({
 				title: product.title,
@@ -126,7 +125,10 @@ async function connectDD() {
 
 			if (existedProduct) return res.json({ message: "Product already exist" });
 
-			const result = await productCollection.insertOne({...product, price: parseFloat(product.price)});
+			const result = await productCollection.insertOne({
+				...product,
+				price: parseFloat(product.price),
+			});
 
 			res.json({ message: "Product successfully added", result });
 		});
@@ -143,77 +145,97 @@ async function connectDD() {
 			res.json({ message: "product fetched successfully", result });
 		});
 
+		app.get("/all-product", async (req, res) => {
+			const { title, category, brand, sort, page = 1, limit = 9 } = req.query;
 
-        app.get("/all-product", async(req, res) => {
-
-            const {title, category, brand, sort, page=1, limit=9} = req.query;
-
-            const query = {};
+			const query = {};
 			let sortOption = 1;
 
-            if(title){
-                query.title = { $regex: title, $options: "i"}
-            }
-            if(category){
-                query.category = { $regex: category, $options: "i"}
-            }
-            if(brand){
-                query.brand = { $regex: brand, $options: "i"}
-            }
-            if(sort === "dec"){
-                sortOption = -1
+			if (title) {
+				query.title = { $regex: title, $options: "i" };
+			}
+			if (category) {
+				query.category = { $regex: category, $options: "i" };
+			}
+			if (brand) {
+				query.brand = { $regex: brand, $options: "i" };
+			}
+			if (sort === "dec") {
+				sortOption = -1;
 				console.log(sortOption);
-				
-            }else{
-				sortOption = 1
+			} else {
+				sortOption = 1;
 			}
 
-			const pageInNumber = Number(page)
-			const limitInNumber = Number(limit)
+			const pageInNumber = Number(page);
+			const limitInNumber = Number(limit);
 
 			console.log(pageInNumber, limitInNumber);
-			
 
 			const result = await productCollection
-			.find(query)
-			.skip((pageInNumber - 1) * limitInNumber)
-			.limit(limitInNumber)
-			.sort({price: sortOption})
-			.toArray()
+				.find(query)
+				.skip((pageInNumber - 1) * limitInNumber)
+				.limit(limitInNumber)
+				.sort({ price: sortOption })
+				.toArray();
 
-			if(!result) res.status(404).json({message: "Product not found", result: null})
+			if (!result)
+				res.status(404).json({ message: "Product not found", result: null });
 
-				const product = await productCollection.find({},{brand: 1, category: 1}).toArray()
+			const product = await productCollection
+				.find({}, { brand: 1, category: 1 })
+				.toArray();
 
-				const productBrand = [...new Set(product.map( item => item.brand))]
-				const productCategory = [...new Set(product.map( item => item.category))]
-				const totalProduct = await productCollection.countDocuments(query)
-				
+			const productBrand = [...new Set(product.map((item) => item.brand))];
+			const productCategory = [
+				...new Set(product.map((item) => item.category)),
+			];
+			const totalProduct = await productCollection.countDocuments(query);
 
-				res.json({message: "successfully fetched products", result, productBrand, productCategory, totalProduct})
-        })
-
-
+			res.json({
+				message: "successfully fetched products",
+				result,
+				productBrand,
+				productCategory,
+				totalProduct,
+			});
+		});
 
 		// wishlist endpoints
 
-		app.patch("/add-to-wishlist", async(req, res) => {
-			const {email, productId} = req.body;
+		app.patch("/add-to-wishlist", async (req, res) => {
+			const { email, productId } = req.body;
 
-			const result = await userCollection.updateOne({email},{
-				$addToSet:{
-					wishlist: new ObjectId(String(productId))
+			const result = await userCollection.updateOne(
+				{ email },
+				{
+					$addToSet: {
+						wishlist: new ObjectId(String(productId)),
+					},
 				}
-			})
+			);
 
-			res.json({message: "Item added successful", result})
-		})
+			res.json({ message: "Item added successful", result });
+		});
 
+		app.get("/wishlist/:email", async (req, res) => {
+			const email = req.params.email;
 
+			const user = await userCollection.findOne({ email });
 
+			if (!user) return res.status(404).json({ message: "user not found" });
 
+			const product = await productCollection
+				.find({ _id: { $in: user.wishlist } })
+				.toArray();
 
+			if (!product)
+				return res.status(404).json({ message: "product not found" });
 
+			res
+				.status(200)
+				.json({ message: "Wishlist product fetched successfully", result });
+		});
 
 		app.get("/", (_req, res) => {
 			res.send("server connected");
